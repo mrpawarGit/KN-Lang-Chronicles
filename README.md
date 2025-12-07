@@ -285,22 +285,3 @@ When you finish the game, it returns to the main menu so you can select `2` and 
     * IO layer (console or browser via Express)
 
 ---
-
-## 📚 Files Mapping to Assignment
-
-* **Text Adventure (Assignment 1):**
-
-  * KN-Lang: `Text Adventure/TextAdv.kn`
-  * Explanation: `Text Adventure/TextAdv.txt`
-  * Local JS: `Text Adventure/In JS/*.js`
-  * Web version: `deployed-full-game-play/src/textAdventure/*.js`
-
-* **Quiz Master (Assignment 2):**
-
-  * KN-Lang: `Quiz Master/QuizMaster.kn`
-  * Explanation: `Quiz Master/QuizMaster.txt`
-  * Local JS: `Quiz Master/In JS/*.js`
-  * Web version: `deployed-full-game-play/src/quizMaster/*.js`
-
----
-
