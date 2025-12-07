@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>KN-Lang Games Hub</title>
+    <style>
+      body {
+        background: #111;
+        color: #eee;
+        font-family: monospace;
+        padding: 16px;
+      }
+      #screen {
+        background: #000;
+        border: 1px solid #444;
+        padding: 10px;
+        height: 420px;
+        overflow-y: auto;
+        white-space: pre-line;
+      }
+      #input-row {
+        margin-top: 10px;
+      }
+      #cmd {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #444;
+        background: #222;
+        color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>KN-Lang Games Hub</h2>
+    <div id="screen"></div>
+    <div id="input-row">
+      <input id="cmd" placeholder="Type here and press Enter..." autofocus />
+    </div>
+
+    <script>
+      const screen = document.getElementById("screen");
+      const input = document.getElementById("cmd");
+
+      function print(text) {
+        if (!text) return;
+        screen.textContent += text + "\n";
+        screen.scrollTop = screen.scrollHeight;
+      }
+
+      async function start() {
+        const res = await fetch("/start");
+        const data = await res.json();
+        print(data.output);
+      }
+
+      async function sendCommand(command) {
+        const res = await fetch("/command", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ command }),
+        });
+        const data = await res.json();
+        if (command) print("> " + command);
+        print(data.output);
+      }
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const cmd = input.value.trim();
+          input.value = "";
+          sendCommand(cmd);
+        }
+      });
+
+      // start whole hub
+      start();
+    </script>
+  </body>
+</html>
