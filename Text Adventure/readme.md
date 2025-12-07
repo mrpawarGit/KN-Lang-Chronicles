@@ -1,6 +1,33 @@
-## 🕹️ Games Overview
+## 🕹️ Text Adventure 
 
-###  Text Adventure 
+### 🖥️ Running the Console Versions (Local Node.js)
+
+```bash
+cd Text Adventure/In JS
+node game.js
+```
+
+You’ll see something like:
+
+```text
+Welcome to the Text Adventure!
+What is your name?
+```
+
+Then you can start typing commands like:
+
+```text
+go north
+pick crumpled note
+go north
+pick rusty key
+go west
+use key
+go east
+```
+---
+
+###  Games Overview
 
 * A small **console-based adventure game**.
 * You move between rooms, pick up items, and solve simple puzzles.
