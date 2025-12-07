@@ -32,31 +32,31 @@ KN-Lang-Chronicles
 ## 🌐 Deployed web version
 ```            
 ├───deployed-full-game-play        # Web version: Node.js + Express + HTML (for Render deployment)
-│   │   .gitignore
-│   │   package-lock.json
-│   │   package.json
-│   │   server.js
-│   │
-│   ├───public
-│   │       index.html             # Simple console-style UI in browser
-│   │
-│   └───src
-│       │   gameHub.js             # Main menu hub: choose which game to play
-│       │
-│       ├───quizMaster             # Quiz Master (web version logic)
-│       │   │   index.js
-│       │   │   Player.js
-│       │   │   Question.js
-│       │   │   QuizMaster.js
-│       │   │
-│       │   └───data
-│       │           questionBank.js
-│       │
-│       └───textAdventure          # Text Adventure (web version logic)
-│               Game.js
-│               Player.js
-│               Room.js
-│
+    │   .gitignore
+    │   package-lock.json
+    │   package.json
+    │   server.js
+    │
+    ├───public
+    │       index.html             # Simple console-style UI in browser
+    │
+    └───src
+        │   gameHub.js             # Main menu hub: choose which game to play
+        │
+        ├───quizMaster             # Quiz Master (web version logic)
+        │   │   index.js
+        │   │   Player.js
+        │   │   Question.js
+        │   │   QuizMaster.js
+        │   │
+        │   └───data
+        │           questionBank.js
+        │
+        └───textAdventure          # Text Adventure (web version logic)
+                Game.js
+                Player.js
+                Room.js
+ 
 ````
 
 ---
