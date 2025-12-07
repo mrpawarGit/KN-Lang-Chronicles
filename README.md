@@ -17,6 +17,16 @@ This repository contains my solutions for the **KNNX India – KN-Lang Chronicle
 KN-Lang-Chronicles
 │
 └───Text Adventure                 # Assignment 1: Text Adventure
+├───Quiz Master                    # Assignment 2: Quiz Master
+├───deployed-full-game-play        # Web version: Node.js + Express + HTML (for Render deployment)
+
+           
+```
+### KN-Lang Scripts
+```text
+KN-Lang-Chronicles
+│
+└───Text Adventure                 # Assignment 1: Text Adventure
 |   │   TextAdv.kn                 # KN-Lang script
 |   │   TextAdv.txt                # Human-readable flow / explanation
 |   │
