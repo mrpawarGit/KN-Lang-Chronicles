@@ -1,0 +1,314 @@
+// Class Question
+Squad Question {
+  Quark text;
+  Quark category;
+  Quark difficulty;
+  Quark correctAnswer;
+}
+
+// Class Player
+Squad Player {
+  Quark name = "Player";
+  Quark score = 0;
+
+  Doodle updateScore(points) {
+    score = score + points;
+  }
+}
+
+// Class QuizMaster
+Squad QuizMaster {
+  Quark questions = [];
+  Quark player = Null;
+  Quark currentCategory = Null;
+  Quark currentDifficulty = Null;
+
+  Doodle start() {
+    Print("=== Quiz Master ===");
+    Print("Welcome to the quiz game.\n");
+
+    Quark name = Input("Enter your name: ");
+    If (name.trim() == "") {
+      name = "Player";
+    }
+    player = new Player();
+    player.name = name;
+
+    Print("\nHello, " + player.name + ".\n");
+
+    chooseCategory();
+    chooseDifficulty();
+    runQuiz();
+    showScore();
+  }
+
+  Doodle chooseCategory() {
+    Print("Choose a category:");
+    Print("1. Science");
+    Print("2. History");
+    Print("3. Fun Facts");
+
+    SpinCycle (currentCategory == Null) {
+      Quark choice = Input("Enter 1, 2, or 3: ").trim();
+      If (choice == "1") {
+        currentCategory = "Science";
+      } Else If (choice == "2") {
+        currentCategory = "History";
+      } Else If (choice == "3") {
+        currentCategory = "Fun Facts";
+      } Else {
+        Print("Invalid choice. Please enter 1, 2, or 3.");
+      }
+    }
+
+    Print("\nCategory selected: " + currentCategory + "\n");
+  }
+
+  Doodle chooseDifficulty() {
+    Print("Choose difficulty:");
+    Print("1. Easy   (+5 / -2)");
+    Print("2. Medium (+10 / -5)");
+    Print("3. Hard   (+15 / -7)");
+
+    SpinCycle (currentDifficulty == Null) {
+      Quark choice = Input("Enter 1, 2, or 3: ").trim();
+      If (choice == "1") {
+        currentDifficulty = "Easy";
+      } Else If (choice == "2") {
+        currentDifficulty = "Medium";
+      } Else If (choice == "3") {
+        currentDifficulty = "Hard";
+      } Else {
+        Print("Invalid choice. Please enter 1, 2, or 3.");
+      }
+    }
+
+    Print("\nDifficulty selected: " + currentDifficulty + "\n");
+  }
+
+  Doodle evaluateAnswer(question, userAnswer) {
+    Quark ua = userAnswer.trim().toLower();
+    Quark ca = question.correctAnswer.toLower();
+    Return (ua == ca);
+  }
+
+  Doodle commentOnAnswer(isCorrect) {
+    If (isCorrect) {
+      Print("Well, someone paid attention in school!");
+    } Else {
+      Print("Close… if we were grading on imagination.");
+    }
+  }
+
+  Doodle getPointsForDifficulty(isCorrect) {
+    If (currentDifficulty == "Easy") {
+      Return isCorrect ? 5 : -2;
+    }
+    If (currentDifficulty == "Medium") {
+      Return isCorrect ? 10 : -5;
+    }
+    If (currentDifficulty == "Hard") {
+      Return isCorrect ? 15 : -7;
+    }
+    Return 0;
+  }
+
+  Doodle askQuestion(num, question) {
+    Print("Question " + num + ": (" + question.category + " - " + question.difficulty + ")");
+    Print(question.text);
+    Quark ans = Input("Your answer: ");
+
+    Quark ok = evaluateAnswer(question, ans);
+    Quark pts = getPointsForDifficulty(ok);
+
+    player.updateScore(pts);
+    commentOnAnswer(ok);
+
+    Print("You " + (ok ? "gained " : "lost ") + Abs(pts) + " points.");
+    Print("Current score: " + player.score + "\n");
+  }
+
+  Doodle runQuiz() {
+    Quark totalQuestions = 10;
+
+    // filter by category & difficulty
+    Quark filtered = [];
+    For (Quark i = 0; i < questions.length; i = i + 1) {
+      Quark q = questions[i];
+      If (q.category == currentCategory && q.difficulty == currentDifficulty) {
+        filtered.add(q);
+      }
+    }
+
+    // if none for that difficulty, use all from category
+    If (filtered.length == 0) {
+      For (Quark j = 0; j < questions.length; j = j + 1) {
+        Quark q2 = questions[j];
+        If (q2.category == currentCategory) {
+          filtered.add(q2);
+        }
+      }
+    }
+
+    For (Quark k = 0; k < totalQuestions; k = k + 1) {
+      Quark qn = filtered[k % filtered.length];
+      askQuestion(k + 1, qn);
+    }
+  }
+
+  Doodle showScore() {
+    Print("=== Quiz Over ===");
+    Print("Final score for " + player.name + ": " + player.score);
+
+    If (player.score >= 80) {
+      Print("Quiz Royalty has arrived!");
+    } Else If (player.score >= 50) {
+      Print("Quiz Master in training.");
+    } Else {
+      Print("Better luck next time, genius.");
+    }
+  }
+}
+
+// QuestionBank 
+Quark questionBank = [];
+
+// Science - Easy
+Quark q1 = new Question();
+q1.text = "What is the chemical symbol for water?";
+q1.category = "Science";
+q1.difficulty = "Easy";
+q1.correctAnswer = "H2O";
+questionBank.add(q1);
+
+Quark q2 = new Question();
+q2.text = "Which planet is known as the Red Planet?";
+q2.category = "Science";
+q2.difficulty = "Easy";
+q2.correctAnswer = "Mars";
+questionBank.add(q2);
+
+// Science - Medium
+Quark q3 = new Question();
+q3.text = "What part of the cell contains the genetic material (DNA)?";
+q3.category = "Science";
+q3.difficulty = "Medium";
+q3.correctAnswer = "Nucleus";
+questionBank.add(q3);
+
+Quark q4 = new Question();
+q4.text = "What force keeps objects attracted to the Earth?";
+q4.category = "Science";
+q4.difficulty = "Medium";
+q4.correctAnswer = "Gravity";
+questionBank.add(q4);
+
+// Science - Hard
+Quark q5 = new Question();
+q5.text = "What is the powerhouse of the cell?";
+q5.category = "Science";
+q5.difficulty = "Hard";
+q5.correctAnswer = "Mitochondria";
+questionBank.add(q5);
+
+Quark q6 = new Question();
+q6.text = "Approximately what is the speed of light in vacuum (in km/s)?";
+q6.category = "Science";
+q6.difficulty = "Hard";
+q6.correctAnswer = "300000";
+questionBank.add(q6);
+
+// History - Easy
+Quark q7 = new Question();
+q7.text = "Who was the first President of the United States of America?";
+q7.category = "History";
+q7.difficulty = "Easy";
+q7.correctAnswer = "George Washington";
+questionBank.add(q7);
+
+Quark q8 = new Question();
+q8.text = "In which country are the Pyramids of Giza located?";
+q8.category = "History";
+q8.difficulty = "Easy";
+q8.correctAnswer = "Egypt";
+questionBank.add(q8);
+
+// History - Medium
+Quark q9 = new Question();
+q9.text = "In which year did World War II end? (Hint: 19xx)";
+q9.category = "History";
+q9.difficulty = "Medium";
+q9.correctAnswer = "1945";
+questionBank.add(q9);
+
+Quark q10 = new Question();
+q10.text = "Who was known as the 'Iron Lady'?";
+q10.category = "History";
+q10.difficulty = "Medium";
+q10.correctAnswer = "Margaret Thatcher";
+questionBank.add(q10);
+
+// History - Hard
+Quark q11 = new Question();
+q11.text = "Which empire was ruled by Genghis Khan?";
+q11.category = "History";
+q11.difficulty = "Hard";
+q11.correctAnswer = "Mongol Empire";
+questionBank.add(q11);
+
+Quark q12 = new Question();
+q12.text = "Which ancient civilization built Machu Picchu?";
+q12.category = "History";
+q12.difficulty = "Hard";
+q12.correctAnswer = "Inca";
+questionBank.add(q12);
+
+// Fun Facts - Easy
+Quark q13 = new Question();
+q13.text = "Which animal is known as the 'King of the Jungle'?";
+q13.category = "Fun Facts";
+q13.difficulty = "Easy";
+q13.correctAnswer = "Lion";
+questionBank.add(q13);
+
+Quark q14 = new Question();
+q14.text = "How many days are there in a leap year?";
+q14.category = "Fun Facts";
+q14.difficulty = "Easy";
+q14.correctAnswer = "366";
+questionBank.add(q14);
+
+// Fun Facts - Medium
+Quark q15 = new Question();
+q15.text = "Which is the tallest mountain in the world?";
+q15.category = "Fun Facts";
+q15.difficulty = "Medium";
+q15.correctAnswer = "Mount Everest";
+questionBank.add(q15);
+
+Quark q16 = new Question();
+q16.text = "Which is the largest ocean on Earth?";
+q16.category = "Fun Facts";
+q16.difficulty = "Medium";
+q16.correctAnswer = "Pacific";
+questionBank.add(q16);
+
+// Fun Facts - Hard
+Quark q17 = new Question();
+q17.text = "Which country has the most time zones in the world?";
+q17.category = "Fun Facts";
+q17.difficulty = "Hard";
+q17.correctAnswer = "France";
+questionBank.add(q17);
+
+Quark q18 = new Question();
+q18.text = "What is the smallest country in the world by area?";
+q18.category = "Fun Facts";
+q18.difficulty = "Hard";
+q18.correctAnswer = "Vatican City";
+questionBank.add(q18);
+
+// Entry Point
+Quark quiz = new QuizMaster();
+quiz.questions = questionBank;
+quiz.start();
