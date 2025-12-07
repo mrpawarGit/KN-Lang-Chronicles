@@ -1,5 +1,7 @@
 # KN-Lang Chronicles 🧠🎮
 
+# 🎮 Play Live - [▶️ Start Game](https://kn-lang-chronicles.onrender.com/)
+
 This repository contains my solutions for the **KNNX India – KN-Lang Chronicles** assignment, implemented in two styles:
 
 1. ✅ **Original KN-Lang pseudo language** (`.kn` + human-readable `.txt`)
