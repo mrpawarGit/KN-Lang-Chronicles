@@ -15,29 +15,18 @@ This repository contains my solutions for the **KNNX India – KN-Lang Chronicle
 
 ```text
 KN-Lang-Chronicles
-│   README.md
-│
-├───Quiz Master                    # Assignment 2: Quiz Master
-│   │   QuizMaster.kn              # KN-Lang script
-│   │   QuizMaster.txt             # Human-readable flow / explanation
-│   │
-│   └───In JS                      # Pure Node.js console implementation
-│       │   index.js
-│       │   Player.js
-│       │   Question.js
-│       │   QuizMaster.js
-│       │
-│       └───data
-│               questionBank.js
 │
 └───Text Adventure                 # Assignment 1: Text Adventure
-    │   TextAdv.kn                 # KN-Lang script
-    │   TextAdv.txt                # Human-readable flow / explanation
+|   │   TextAdv.kn                 # KN-Lang script
+|   │   TextAdv.txt                # Human-readable flow / explanation
+|   │
+|   └───In JS                      # Pure Node.js console implementation
+├───Quiz Master                    # Assignment 2: Quiz Master
+    │   QuizMaster.kn              # KN-Lang script
+    │   QuizMaster.txt             # Human-readable
     │
     └───In JS                      # Pure Node.js console implementation
-            game.js
-            player.js
-            room.js
+           
 ```
 
 ## 🌐 Deployed web version
