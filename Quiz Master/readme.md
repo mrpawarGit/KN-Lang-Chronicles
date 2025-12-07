@@ -1,6 +1,33 @@
-## 🕹️ Games Overview
+## Quiz Master 
 
-### Quiz Master 
+### 🖥️ Running the Console Versions (Local Node.js)
+
+```bash
+cd Text Adventure/In JS
+node game.js
+```
+
+You’ll see something like:
+
+```text
+Welcome to the Text Adventure!
+What is your name?
+```
+
+Then you can start typing commands like:
+
+```text
+go north
+pick crumpled note
+go north
+pick rusty key
+go west
+use key
+go east
+```
+---
+
+### 🕹️ Games Overview
 
 * An interactive **quiz game** with:
 
