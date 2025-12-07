@@ -1,0 +1,249 @@
+// Room Squad
+Squad Room {
+  Quark name;
+  Quark description;
+  Quark items = [];
+  Quark exits = {};
+
+  Doodle showDetails() {
+    Print("\n=== " + name + " ===");
+    Print(description);
+
+    If (items.length > 0) {
+      Print("Items here: " + items.join(", "));
+    } Else {
+      Print("Nothing useful lying around.");
+    }
+
+    Quark dirs = Object.keys(exits);
+    If (dirs.length > 0) {
+      Print("Exits: " + dirs.join(", "));
+    }
+  }
+}
+
+// Player Squad
+Squad Player {
+  Quark name = "Unnamed Hero";
+  Quark inventory = [];
+  Quark currentRoom = Null;
+  Quark isAlive = True;
+
+  Doodle pickUp(itemName) {
+    Quark i = currentRoom.items.indexOf(itemName);
+    If (i == -1) {
+      Print("There is no \"" + itemName + "\" here. Maybe imagine harder?");
+    } Else {
+      currentRoom.items.removeAt(i);
+      inventory.add(itemName);
+      Print("You picked up the " + itemName + ". Confidence level +10.");
+    }
+  }
+
+  Doodle move(direction, rooms) {
+    Quark nextName = currentRoom.exits[direction];
+    If (nextName == Null) {
+      Print("You stride into the void. Try another direction.");
+      Return;
+    }
+    currentRoom = rooms[nextName];
+    currentRoom.showDetails();
+  }
+
+  Doodle showInventory() {
+    If (inventory.length == 0) {
+      Print("Your pockets are as empty as your weekend plans.");
+    } Else {
+      Print("You are carrying: " + inventory.join(", "));
+    }
+  }
+}
+
+// Game Manager Squad
+Squad GameManager {
+  Quark rooms = {};
+  Quark player = new Player();
+  Quark lockedDoorOpen = False;
+  Quark riddleSolved = False;
+
+  Doodle setupWorld() {
+    // Entrance
+    Quark entrance = new Room();
+    entrance.name = "Entrance";
+    entrance.description =
+      "You stand at the entrance of a strange building. The air smells like unfinished features.";
+    entrance.exits = { "north": "Main Hall" };
+    rooms["Entrance"] = entrance;
+
+    // Main Hall
+    Quark hall = new Room();
+    hall.name = "Main Hall";
+    hall.description =
+      "A wide hall with flickering lights. A crumpled note lies on the floor.";
+    hall.items.add("crumpled note");
+    hall.exits = {
+      "south": "Entrance",
+      "north": "Storage Closet",
+      "west": "Locked Door",
+      "east": "Riddle Room"
+    };
+    rooms["Main Hall"] = hall;
+
+    // Storage Closet
+    Quark closet = new Room();
+    closet.name = "Storage Closet";
+    closet.description =
+      "A tiny room full of dusty boxes. Something shiny peeks from under a box.";
+    closet.items.add("rusty key");
+    closet.exits = { "south": "Main Hall" };
+    rooms["Storage Closet"] = closet;
+
+    // Locked Door
+    Quark door = new Room();
+    door.name = "Locked Door";
+    door.description =
+      "A heavy wooden door with a stubborn keyhole. It looks unimpressed by your presence.";
+    door.exits = { "south": "Main Hall" }; // east added after unlock
+    rooms["Locked Door"] = door;
+
+    // Riddle Room
+    Quark riddle = new Room();
+    riddle.name = "Riddle Room";
+    riddle.description =
+      "Glowing text on the wall:\n\"I follow you all day, but disappear at night. Who am I?\"";
+    riddle.exits = { "west": "Main Hall" };
+    rooms["Riddle Room"] = riddle;
+
+    // Treasure Room
+    Quark treasure = new Room();
+    treasure.name = "Treasure Room";
+    treasure.description =
+      "A bright room filled with glowing monitors and coffee mugs. You made it!";
+    treasure.items.add("golden badge");
+    treasure.exits = { "west": "Locked Door" };
+    rooms["Treasure Room"] = treasure;
+  }
+
+  Doodle startGame() {
+    Print("Welcome to the KN-Lang Text Adventure!");
+    player.name = Input("What is your name, adventurer? ");
+    If (player.name.trim() == "") {
+      player.name = "Unnamed Hero";
+    }
+    Print("\nHello, " + player.name + ". Try not to break reality.\n");
+
+    setupWorld();
+    player.currentRoom = rooms["Entrance"];
+    player.currentRoom.showDetails();
+
+    Print("\nCommands: go <dir>, pick <item>, inventory, look, use <item>, answer <text>, quit");
+
+    SpinCycle (player.isAlive) {
+      Quark cmd = Input(">> ");
+      handleCommand(cmd);
+    }
+  }
+
+  Doodle handleCommand(raw) {
+    Quark parts = raw.split(" ");
+    Quark command = parts[0].toLower();
+    Quark rest = raw.substring(command.length).trim();
+
+    If (command == "go") {
+      handleGo(rest);
+    } Else If (command == "pick") {
+      player.pickUp(rest.toLower());
+    } Else If (command == "inventory") {
+      player.showInventory();
+    } Else If (command == "look") {
+      player.currentRoom.showDetails();
+    } Else If (command == "use") {
+      handleUse(rest.toLower());
+    } Else If (command == "answer") {
+      handleAnswer(rest.toLower());
+    } Else If (command == "quit") {
+      Print("You leave the adventure. The world sighs in disappointment.");
+      player.isAlive = False;
+    } Else {
+      Print("The universe tilts its head. It has no idea what that means.");
+    }
+  }
+
+  Doodle handleGo(dir) {
+    If (dir == "") {
+      Print("Go where, exactly? Mind-reading is still in beta.");
+      Return;
+    }
+
+    If (player.currentRoom.name == "Locked Door"
+        && dir == "east"
+        && lockedDoorOpen == False) {
+      Print("You push the door. It does not care. Maybe a key would help.");
+      Return;
+    }
+
+    player.move(dir, rooms);
+
+    If (player.currentRoom.name == "Treasure Room") {
+      Print("\nYou found the treasure room and earn eternal bragging rights. Game over!");
+      player.isAlive = False;
+    }
+  }
+
+  Doodle handleUse(item) {
+    If (item == "" ) {
+      Print("Use what? Your imagination?");
+      Return;
+    }
+
+    // use rusty key on Locked Door
+    If ((item == "rusty key" || item == "key")
+        && player.currentRoom.name == "Locked Door") {
+
+      If (player.inventory.indexOf("rusty key") == -1) {
+        Print("You pat your pockets. No key. Just lint and poor decisions.");
+        Return;
+      }
+
+      If (lockedDoorOpen) {
+        Print("The door is already unlocked. No need to overachieve.");
+        Return;
+      }
+
+      lockedDoorOpen = True;
+      rooms["Locked Door"].exits["east"] = "Treasure Room";
+      Print("You turn the rusty key. The lock clicks and the door swings open.");
+      Return;
+    }
+
+    Print("You wave the " + item + " around. Nothing magical happens, sadly.");
+  }
+
+  Doodle handleAnswer(ans) {
+    If (player.currentRoom.name != "Riddle Room") {
+      Print("You shout an answer into the void. The void is confused but respectful.");
+      Return;
+    }
+
+    If (ans == "") {
+      Print("You answer with silence. Bold choice, but incorrect.");
+      Return;
+    }
+
+    If (ans == "shadow") {
+      If (riddleSolved) {
+        Print("The wall text yawns. You already solved this one.");
+      } Else {
+        riddleSolved = True;
+        Print("The glowing text fades. A mysterious token appears on the floor.");
+        rooms["Riddle Room"].items.add("mysterious token");
+      }
+    } Else {
+      Print("Close... if we were grading on imagination. The text stays unchanged.");
+    }
+  }
+}
+
+// Start the game
+Quark game = new GameManager();
+game.startGame();
