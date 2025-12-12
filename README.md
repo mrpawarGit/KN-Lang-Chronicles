@@ -1,6 +1,7 @@
 # KN-Lang Chronicles 🧠🎮
 
 # 🎮 Play Live - [▶️ Start Game](https://kn-lang-chronicles.onrender.com/)
+# ▶️ Explanation Video - [⏯️Play](https://drive.google.com/file/d/14S2GXQzAhbZkNzI8r54Zw71rnaziBYyS/view?usp=drive_link)
 
 This repository contains my solutions for the **KNNX India – KN-Lang Chronicles** assignment, implemented in two styles:
 
